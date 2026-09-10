@@ -33,7 +33,7 @@
 
         <activity
             android:name=".popup.PopupActivity"
-            android:configChanges="orientation|screenSize|screenDensity|keyboardHidden|uiMode"
+            android:configChanges="orientation|screenSize|density|keyboardHidden|uiMode"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTask"
@@ -45,7 +45,7 @@
 
         <activity
             android:name=".consent.DeletionConsentActivity"
-            android:configChanges="orientation|screenSize|screenDensity|keyboardHidden|uiMode"
+            android:configChanges="orientation|screenSize|density|keyboardHidden|uiMode"
             android:excludeFromRecents="true"
             android:exported="false"
             android:noHistory="true"
