@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import io.github.mosbee1.thebomb.TheBombApp
 import io.github.mosbee1.thebomb.notifications.Notifications
 import io.github.mosbee1.thebomb.work.BackgroundWork
