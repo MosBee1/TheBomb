@@ -1,0 +1,43 @@
+The Bomb: every screenshot lands armed. Defuse the keepers, detonate the
+rest — on your schedule, on your device.
+
+TRIAGE IN ONE TAP
+The moment a screenshot lands, a translucent popup (and a notification with
+thumbnail) appears: Defuse, Archive, Detonate Now — or light a fuse without
+leaving the popup.
+
+FUSES THAT ACTUALLY FIT
+Four quick fuse presets, each fully yours to configure — 10 minutes, 1 hour,
+1 day, 1 week by default, changeable to any amount of minutes, hours, days,
+or weeks. Prefer something else? A custom slider picks the exact duration
+with a live "Detonates in…" preview. Timed screenshots wear a live countdown
+chip; cut the fuse any time before it fires.
+
+THE DAILY BLAST
+Archive what you're not sure about. At your chosen time (default 11:30 PM)
+all archived, un-defused, un-fused screenshots are detonated — with an
+optional heads-up 30 minutes before. The Home screen always shows when the
+next blast runs.
+
+DEFUSED = SAFE FOREVER
+Pinned screenshots are exempt from every fuse and the daily blast. No
+exceptions.
+
+STATS THAT FEEL GOOD
+Animated counters and a fallout report: screenshots processed, storage
+cleared, detonated vs defused.
+
+FIND ANYTHING
+Search by filename and filter by date range.
+
+PRIVATE BY ARCHITECTURE
+No accounts. No analytics. No ads. No network permission at all — the app
+cannot phone home because it has no way to. Everything stays on your device,
+and Android's own system dialog approves every deletion.
+
+MATERIAL YOU
+Dynamic color on Android 12+, a hand-crafted teal/amber palette on older
+devices, full dark mode, serif-and-sans typography, and a small celebration
+when your triage list hits zero.
+
+Free and open source under the MIT license.

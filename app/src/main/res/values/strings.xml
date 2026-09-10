@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">The Bomb</string>
+
+    <string name="notif_channel_service_name">Bomb watcher</string>
+    <string name="notif_channel_service_desc">Persistent status for the real-time screenshot watcher. Silent.</string>
+    <string name="notif_channel_screenshot_name">New screenshots</string>
+    <string name="notif_channel_screenshot_desc">Pops up the moment a screenshot lands, with Defuse / Archive / Detonate actions.</string>
+    <string name="notif_channel_reminder_name">Daily blast reminders</string>
+    <string name="notif_channel_reminder_desc">Optional heads-up before the daily blast runs.</string>
+    <string name="notif_channel_consent_name">Detonations needing approval</string>
+    <string name="notif_channel_consent_desc">Android requires your approval to delete screenshots; tap to approve.</string>
+
+    <string name="notif_service_title">The Bomb is armed</string>
+    <string name="notif_service_text">Watching for new screenshots — each one lands armed. Tap to open.</string>
+
+    <string name="notif_screenshot_title">Screenshot armed</string>
+    <string name="action_keep">Defuse</string>
+    <string name="action_archive">Archive</string>
+    <string name="action_delete_now">Detonate now</string>
+
+    <string name="notif_consent_title">Approval needed to detonate</string>
+    <plurals name="notif_consent_text">
+        <item quantity="one">1 armed screenshot is awaiting your detonation approval. Tap to review.</item>
+        <item quantity="other">%d armed screenshots are awaiting your detonation approval. Tap to review.</item>
+    </plurals>
+    <string name="notif_permission_warning_title">Screenshot access lost</string>
+    <string name="notif_permission_warning_text">The Bomb can no longer watch for screenshots. Tap to fix.</string>
+    <string name="notif_delete_failed_title">Detonation failed</string>
+    <plurals name="notif_delete_failed_text">
+        <item quantity="one">Couldn\'t delete 1 screenshot. It is still on your device.</item>
+        <item quantity="other">Couldn\'t delete %d screenshots. They are still on your device.</item>
+    </plurals>
+
+    <string name="notif_cleanup_reminder_title">Daily blast in 30 minutes</string>
+    <plurals name="notif_cleanup_reminder_text">
+        <item quantity="one">%d archived screenshot will be detonated at the daily blast.</item>
+        <item quantity="other">%d archived screenshots will be detonated at the daily blast.</item>
+    </plurals>
+
+    <string name="onboarding_intro">Every screenshot lands armed. Defuse the keepers, stage the maybes for the daily blast, or light a fuse and walk away. Everything stays on this device.</string>
+    <string name="onboarding_optional_hint">optional</string>
+    <string name="onboarding_degraded_title">Popups will be quieter</string>
+    <string name="onboarding_degraded_body">Without notifications or full-screen popup access, armed screenshots wait silently in the list instead. You can grant access any time in Settings or system settings.</string>
+    <string name="onboarding_enable_janitor">Arm The Bomb</string>
+    <string name="onboarding_not_now">Not now</string>
+
+    <string name="perm_images_title">Photos and videos access</string>
+    <string name="perm_images_body">Required. The Bomb needs to see new screenshots to list them, show thumbnails, and detonate them on your command. Nothing is uploaded — the app has no internet permission at all.</string>
+    <string name="perm_notifications_title">Notifications</string>
+    <string name="perm_notifications_body">Used for the instant screenshot popup with Defuse / Archive / Detonate buttons, and optional blast reminders.</string>
+    <string name="perm_fsi_title">Full-screen popups</string>
+    <string name="perm_fsi_body">Lets the screenshot popup appear over the lock screen, like an incoming call. On Android 14 this must be granted in system settings; the app works without it, showing a normal heads-up notification instead.</string>
+    <string name="perm_battery_title">Battery optimization exemption</string>
+    <string name="perm_battery_body">Optional. Battery savers can delay fuse timers by a few minutes. Exempting The Bomb keeps detonations punctual. The app never begs for this.</string>
+    <string name="perm_overlay_title">Display over other apps</string>
+    <string name="perm_overlay_body">Optional. Lets the popup appear instantly even while you are using the phone. Without it, the popup still appears when the screen is off or locked, and a heads-up notification covers the rest.</string>
+    <string name="perm_state_granted">Granted</string>
+    <string name="perm_state_denied">Denied</string>
+    <string name="perm_action_grant">Grant</string>
+    <string name="perm_action_open_settings">Open settings</string>
+
+    <string name="card_permission_images_title">Screenshot access needed</string>
+    <string name="card_permission_images_body">The Bomb can\'t see screenshots without photo access, so nothing is being tracked right now.</string>
+    <string name="card_permission_notifications_title">Notifications are off</string>
+    <string name="card_permission_notifications_body">You\'ll miss the instant popup. Screenshots are still tracked and detonated on schedule.</string>
+    <string name="card_permission_fsi_title">Popups restricted by Android 14</string>
+    <string name="card_permission_fsi_body">Full-screen popup access isn\'t granted. Tap to allow it in system settings — it\'s the switch labeled \"Full-screen intents\".</string>
+    <string name="card_permission_battery_title">Fuses may run late</string>
+    <string name="card_permission_battery_body">Battery optimization can push fuse timers back by a few minutes. Exempt The Bomb for punctual detonations.</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_kept">Defused</string>
+    <string name="tab_stats">Stats</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="search_hint">Search by file name…</string>
+    <string name="filter_dates">Date range</string>
+    <string name="filter_clear">Clear</string>
+    <string name="filter_no_results_title">No matches</string>
+    <string name="filter_no_results_body">No screenshots match this search or date range. Try clearing the filters.</string>
+
+    <string name="section_pending">Awaiting triage</string>
+    <string name="section_archived">Archived</string>
+    <string name="group_today">Today</string>
+    <string name="group_yesterday">Yesterday</string>
+    <string name="banner_next_cleanup">Next blast at %1$s · in %2$s</string>
+
+    <string name="celebrate_title">All clear!</string>
+    <string name="celebrate_body">💥 Nothing left to detonate. The Bomb rests — until the next screenshot.</string>
+    <string name="empty_archived_title">Nothing staged</string>
+    <string name="empty_archived_body">Swipe a screenshot left to archive it, and it will wait here for the daily blast.</string>
+
+    <string name="action_restore">Restore</string>
+    <string name="action_unkeep">Rearm</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="kept_chip">Defused</string>
+    <string name="timer_approval_needed">Approval needed</string>
+    <string name="timer_cancel">Cut the fuse</string>
+
+    <string name="kept_empty_title">Nothing defused yet</string>
+    <string name="kept_empty_body">Screenshots you defuse live here, safe from every fuse and the daily blast, forever.</string>
+
+    <string name="timer_presets_title">Quick fuses</string>
+    <string name="timer_custom_title">Custom fuse</string>
+    <string name="timer_confirm">Confirm: %1$s</string>
+    <string name="timer_none">no fuse</string>
+    <string name="label_deletes_in">Detonates in %1$s</string>
+    <string name="unit_minutes_short">Min</string>
+    <string name="unit_hours_short">Hrs</string>
+    <string name="unit_days_short">Days</string>
+    <string name="unit_weeks_short">Wks</string>
+    <plurals name="duration_minutes">
+        <item quantity="one">1 minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="one">1 hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <plurals name="duration_days">
+        <item quantity="one">1 day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="duration_weeks">
+        <item quantity="one">1 week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
+
+    <string name="popup_set_timer">Set the fuse</string>
+    <string name="popup_untracked">This screenshot is no longer tracked.</string>
+    <string name="popup_timer_set_toast">Detonating in %1$s</string>
+
+    <string name="stats_title">Statistics</string>
+    <string name="stats_storage_freed">Storage cleared</string>
+    <string name="stats_processed">Processed</string>
+    <string name="stats_deleted">Detonated</string>
+    <string name="stats_kept">Defused</string>
+    <string name="stats_breakdown">Fallout report</string>
+    <string name="legend_pending">Armed</string>
+    <string name="legend_archived">Archived</string>
+    <string name="legend_kept">Defused</string>
+    <string name="stats_pending_now">%1$s currently armed across %2$d screenshots</string>
+    <string name="stats_empty_title">No data yet</string>
+    <string name="stats_empty_body">Take a screenshot and the fuse is lit — numbers appear here.</string>
+
+    <string name="settings_section_janitor">Master switch</string>
+    <string name="settings_janitor">Arm The Bomb</string>
+    <string name="settings_janitor_desc">Watches for new screenshots in real time and enforces fuse timers and the daily blast.</string>
+    <string name="settings_section_behavior">Behavior</string>
+    <string name="settings_auto_archive">Auto-stage new screenshots</string>
+    <string name="settings_auto_archive_desc">File every new screenshot straight into Archived, awaiting the daily blast, instead of the triage list.</string>
+    <string name="settings_popup">Popup on new screenshot</string>
+    <string name="settings_popup_desc">Turn off for notification-only mode.</string>
+    <string name="settings_section_cleanup">Daily blast</string>
+    <string name="settings_cleanup_time">Blast time</string>
+    <string name="settings_reminder">Remind me before the blast</string>
+    <string name="settings_reminder_desc">A heads-up notification 30 minutes before archived screenshots are detonated.</string>
+    <string name="settings_section_presets">Fuse presets</string>
+    <string name="settings_preset_label">Fuse preset %1$d</string>
+    <string name="settings_section_about">About</string>
+    <string name="settings_mit">Free, open source, released under the MIT License.</string>
+    <string name="time_picker_title">Daily blast time</string>
+    <string name="preset_editor_title">Edit preset %1$d</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_license_title">License</string>
+</resources>

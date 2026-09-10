@@ -1,0 +1,4 @@
+Initial release: real-time screenshot detection, one-tap Defuse / Archive /
+Detonate popup, configurable fuse timers with live countdowns, the daily
+blast with optional reminder, the Defused safe zone, stats, search/filter,
+Material You theming.
