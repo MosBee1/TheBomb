@@ -4,12 +4,12 @@ import android.app.Service
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
-import android.content.pm.ServiceInfo
 import android.provider.MediaStore
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat
@@ -30,8 +30,9 @@ import kotlinx.coroutines.withContext
 
 /**
  * Foreground service (dataSync type) hosting the MediaStore ContentObserver
- * that detects screenshots in real time. Started by the Settings toggle and
- * by BootReceiver when armed; stops itself if the user disarms the app.
+ * that detects screenshots in real time. Popup and notification are
+ * mutually exclusive: when the overlay grant lets us show the popup
+ * directly, it replaces the heads-up instead of doubling it.
  */
 class ScreenshotWatcherService : Service() {
 
@@ -54,7 +55,6 @@ class ScreenshotWatcherService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Must be the first thing: foreground within 5s of startForegroundService.
         Notifications.ensureChannels(this)
         ServiceCompat.startForeground(
             this,
@@ -137,7 +137,6 @@ class ScreenshotWatcherService : Service() {
         }
         val inserted = withContext(Dispatchers.IO) { queryRecentScreenshots() }
         if (inserted == null) {
-            // SecurityException or provider failure: permission revoked mid-run.
             Notifications.notifyPermissionWarning(this)
             return
         }
@@ -145,7 +144,6 @@ class ScreenshotWatcherService : Service() {
         for (entity in inserted) {
             onNewScreenshot(entity)
         }
-        // Files may also have been deleted outside the app since last scan.
         val container = (applicationContext as TheBombApp).container
         container.screenshotRepository.reconcileDeletedExternally()
     }
@@ -198,8 +196,6 @@ class ScreenshotWatcherService : Service() {
                         createdAtMillis = createdAt,
                         sizeBytes = cursor.getLong(sizeCol),
                     )
-                    // True only for genuinely new rows; observer double-fires
-                    // and startup rescans hit the IGNORE conflict and skip.
                     if (repo.recordScreenshot(entity)) results += entity
                 }
             }
@@ -217,34 +213,30 @@ class ScreenshotWatcherService : Service() {
         if (settings.autoArchiveEnabled) {
             container.screenshotRepository.markArchived(entity.uri)
         }
-        // Overlay grant permits a background activity launch: the popup can
-        // appear immediately even while the device is unlocked. Without the
-        // grant, the notification's full-screen intent handles locked/off
-        // screens and the heads-up notification (same actions) covers the rest.
+        // Mutually exclusive surfacing: popup shown directly = no heads-up.
+        // Popup off in Settings, no overlay grant, or blocked launch =
+        // notification only.
+        var popupShown = false
         if (settings.popupEnabled && Permissions.canDrawOverOtherApps(this)) {
             val popup = Intent(this, PopupActivity::class.java)
                 .putExtra(Notifications.EXTRA_SCREENSHOT_URI, entity.uri)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             try {
                 startActivity(popup)
+                popupShown = true
             } catch (t: Throwable) {
-                // Some OEMs still block it; the notification below always works.
+                // Launch blocked; fall through to notification.
             }
         }
-        Notifications.notifyScreenshot(this, entity, settings.popupEnabled)
+        if (!popupShown) {
+            Notifications.notifyScreenshot(this, entity, settings.popupEnabled)
+        }
     }
 
     companion object {
-        /** Images newer than this are considered at service startup. */
         private const val STARTUP_LOOKBACK_SECONDS = 120L
         private const val CLOCK_SKEW_OVERLAP_SECONDS = 5L
 
-        /**
-         * Screenshot heuristic: vendor paths/filenames all contain the word.
-         * Checked case-insensitively against both relative path and filename
-         * to cover Pixel (/Pictures/Screenshots), Samsung (/DCIM/Screenshots),
-         * and OEM naming variants.
-         */
         fun looksLikeScreenshot(fileName: String, relativePath: String): Boolean =
             fileName.contains("screenshot", ignoreCase = true) ||
                 relativePath.contains("screenshot", ignoreCase = true)

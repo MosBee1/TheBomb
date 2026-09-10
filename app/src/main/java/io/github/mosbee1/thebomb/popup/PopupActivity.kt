@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Size
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -20,11 +19,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Archive
@@ -72,13 +71,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * The post-screenshot pop-up: a translucent, dialog-styled activity with a
- * live thumbnail (loadThumbnail - never a full decode), Defuse / Archive /
- * Detonate Now, and "Set the fuse" expanding into the full timer picker.
- *
- * Launched by the notification's full-screen intent (locked/off screen) or
- * directly by the watcher service when the optional overlay grant is held
- * (unlocked). noHistory + excludeFromRecents + no window animation.
+ * Compact floating dialog: wraps its content, floats centered over
+ * whatever is on screen, dims behind, tap outside closes. "Set the fuse"
+ * expands the same small card with the quick fuses and slider.
  */
 class PopupActivity : ComponentActivity() {
 
@@ -87,8 +82,6 @@ class PopupActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.setBackgroundDrawableResource(android.R.color.transparent)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-        window.setDimAmount(0.45f)
         setFinishOnTouchOutside(true)
         uriState.value = intent?.getStringExtra(Notifications.EXTRA_SCREENSHOT_URI)
         if (uriState.value == null) {
@@ -113,8 +106,6 @@ class PopupActivity : ComponentActivity() {
 
 private enum class PopupStage { Loading, Ready, Gone, TimerSet }
 
-/** Wraps the row with a "has the DB answered yet" flag so a not-yet-loaded
- *  row is never mistaken for an untracked one. */
 private data class PopupEntityState(
     val loaded: Boolean = false,
     val entity: ScreenshotEntity? = null,
@@ -140,8 +131,6 @@ fun PopupRoot(uri: String, onFinish: () -> Unit) {
     var timerPanelOpen by remember { mutableStateOf(false) }
     var pendingSelection by remember { mutableStateOf<TimerSelection?>(null) }
 
-    // Keyed on `loaded` (fires once): later entity updates (e.g. a newly
-    // armed fuse) must NOT reset the TimerSet confirmation stage.
     LaunchedEffect(entityState.loaded) {
         if (entityState.loaded) {
             stage = if (entity == null) PopupStage.Gone else PopupStage.Ready
@@ -169,9 +158,7 @@ fun PopupRoot(uri: String, onFinish: () -> Unit) {
     }
 
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(24.dp),
+        modifier = Modifier.widthIn(max = 460.dp),
         shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surface,
         tonalElevation = 6.dp,
