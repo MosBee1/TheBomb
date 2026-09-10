@@ -9,7 +9,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
-import android.os.ServiceInfo
+import android.content.pm.ServiceInfo
 import android.provider.MediaStore
 import androidx.core.app.ServiceCompat
 import androidx.core.content.ContextCompat

@@ -128,6 +128,7 @@ fun HomeScreen(mainViewModel: MainViewModel) {
 
     var sheetEntity by remember { mutableStateOf<ScreenshotEntity?>(null) }
     var showRangePicker by remember { mutableStateOf(false) }
+    val groups = rememberRecencyGroups(pending)
 
     LazyColumn(
         modifier = Modifier
@@ -199,7 +200,6 @@ fun HomeScreen(mainViewModel: MainViewModel) {
                 }
             }
         } else {
-            val groups = rememberRecencyGroups(pending)
             groups.forEach { group ->
                 item(key = "group_" + group.label) {
                     Text(

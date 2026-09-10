@@ -1,7 +1,7 @@
 package io.github.mosbee1.thebomb.ui.stats
 
 import android.app.Application
-import androidx.compose.animation.core.animateLongAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -222,13 +222,13 @@ private fun CounterCard(
 
 @Composable
 private fun AnimatedCount(value: Long) {
-    val animated by animateLongAsState(
-        targetValue = value,
+    val animated by animateFloatAsState(
+        targetValue = value.toFloat(),
         animationSpec = tween(durationMillis = 600),
         label = "statCount",
     )
     Text(
-        NumberFormat.getIntegerInstance().format(animated),
+        NumberFormat.getIntegerInstance().format(animated.toLong()),
         style = MaterialTheme.typography.headlineMedium,
     )
 }
