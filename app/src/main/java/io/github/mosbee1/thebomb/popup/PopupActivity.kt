@@ -89,7 +89,7 @@ class PopupActivity : ComponentActivity() {
         window.setBackgroundDrawableResource(android.R.color.transparent)
         window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         window.setDimAmount(0.45f)
-        window.setFinishOnTouchOutside(true)
+        setFinishOnTouchOutside(true)
         uriState.value = intent?.getStringExtra(Notifications.EXTRA_SCREENSHOT_URI)
         if (uriState.value == null) {
             finish()

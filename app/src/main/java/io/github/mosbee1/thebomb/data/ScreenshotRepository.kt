@@ -119,7 +119,7 @@ class ScreenshotRepository(
         DeletionOutcome.Failed(t)
     }
 
-    private fun deleteOneByOne(uris: List<Uri>): DeletionOutcome {
+    private suspend fun deleteOneByOne(uris: List<Uri>): DeletionOutcome {
         var consentSender: IntentSender? = null
         for (uri in uris) {
             try {

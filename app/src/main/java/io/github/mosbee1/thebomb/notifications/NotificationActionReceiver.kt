@@ -9,6 +9,7 @@ import io.github.mosbee1.thebomb.consent.DeletionConsentActivity
 import io.github.mosbee1.thebomb.work.BackgroundWork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -30,7 +31,7 @@ class NotificationActionReceiver : BroadcastReceiver() {
             try {
                 val container = (appContext as TheBombApp).container
                 val repo = container.screenshotRepository
-                val entity = repo.getByUri(uri)
+                val entity = repo.observeByUri(uri).first()
 
                 when (intent.action?.substringAfterLast('.')) {
                     ACTION_KEEP_SUFFIX -> {
