@@ -45,10 +45,9 @@ class ScreenshotRepository(
         dao.insertIfAbsent(entity) != -1L
 
     /**
-     * Marks rows deleted when their files no longer exist in MediaStore
-     * (deleted from the gallery app, or a consent dialog was approved).
+     * Marks rows deleted when their files no longer exist in MediaStore.
      * On query failure a row is assumed to still exist so stats never
-     * overcount "freed".
+     * overcount "cleared".
      */
     suspend fun reconcileDeletedExternally(): Int = withContext(Dispatchers.IO) {
         val resolver = context.contentResolver
@@ -90,17 +89,22 @@ class ScreenshotRepository(
     suspend fun dailyCleanupCandidates(): List<ScreenshotEntity> = dao.dailyCleanupCandidates()
 
     /**
-     * Deletes files via MediaStore. API 30+: one batched createDeleteRequest
-     * (one consent dialog for the whole batch). API 29: per-file delete,
-     * recovering from RecoverableSecurityException on the first file that
-     * needs consent; files deleted before that point are already recorded.
+     * Deletes files via MediaStore. On API 30+, per-file delete is attempted
+     * FIRST: when the user has granted Media management (MANAGE_MEDIA) it
+     * succeeds silently, making fuse timers and the nightly blast fully
+     * automatic. Without that grant the first file raises consent and we
+     * fall back to the single batched createDeleteRequest dialog. API 29
+     * always uses the per-file RecoverableSecurityException flow.
      */
     suspend fun deleteFromMediaStore(uris: List<String>): DeletionOutcome =
         withContext(Dispatchers.IO) {
             if (uris.isEmpty()) return@withContext DeletionOutcome.DeletedDirectly
             val parsed = uris.map(Uri::parse)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                createBatchDeleteRequest(parsed)
+                when (val direct = deleteOneByOne(parsed)) {
+                    is DeletionOutcome.DeletedDirectly -> direct
+                    else -> createBatchDeleteRequest(parsed)
+                }
             } else {
                 deleteOneByOne(parsed)
             }

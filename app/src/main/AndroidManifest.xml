@@ -1,4 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  The Bomb - permission justifications (mirrored in PRIVACY.md):
+
+  READ_MEDIA_IMAGES / READ_EXTERNAL_STORAGE (maxSdk 32)
+      Required to list, thumbnail, and delete screenshots via MediaStore.
+
+  POST_NOTIFICATIONS
+      Popup/actions, blast reminders, consent fallbacks. Optional.
+
+  FOREGROUND_SERVICE / FOREGROUND_SERVICE_DATA_SYNC
+      Keeps the MediaStore watcher alive in real time. Persistent, silent.
+
+  RECEIVE_BOOT_COMPLETED
+      Restarts the watcher after reboot, only when armed.
+
+  USE_FULL_SCREEN_INTENT
+      Popup over the lock screen; detected at runtime on API 34+.
+
+  REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+      Optional: keeps fuses punctual through Doze.
+
+  SYSTEM_ALERT_WINDOW
+      Optional: instant popup while the phone is unlocked.
+
+  MANAGE_MEDIA
+      Optional special access ("Media management", granted only in system
+      settings). When enabled by the user, MediaStore deletions run silently
+      - fuse timers and the nightly blast need no confirmation dialogs.
+      Off by default; the consent-dialog flow remains the fallback.
+
+  Deliberately NOT requested: INTERNET (the app has zero network access),
+  MANAGE_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE,
+  ACCESS_FINE/COARSE_LOCATION, CAMERA, RECORD_AUDIO, CONTACTS.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -12,6 +46,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.MANAGE_MEDIA" />
 
     <application
         android:name=".TheBombApp"

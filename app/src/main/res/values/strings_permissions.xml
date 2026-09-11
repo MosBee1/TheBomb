@@ -5,5 +5,6 @@
     <string name="perm_row_notifications">Notifications</string>
     <string name="perm_row_fsi">Full-screen popups</string>
     <string name="perm_row_overlay">Display over other apps</string>
+    <string name="perm_row_media">Media management (silent auto-delete)</string>
     <string name="perm_row_battery">Battery exemption</string>
 </resources>

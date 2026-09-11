@@ -21,6 +21,7 @@ import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Image
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.NotificationsActive
+import androidx.compose.material.icons.rounded.PhotoLibrary
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -45,9 +46,9 @@ import io.github.mosbee1.thebomb.ui.common.SectionHeader
 import io.github.mosbee1.thebomb.ui.common.requestIgnoreBatteryOptimizations
 
 /**
- * Live permission status table: five rows, Granted/Denied chip each, and a
- * one-tap shortcut to the real system switch (runtime dialog for photos and
- * notifications, deep-link for overlay / full-screen intent / battery).
+ * Live permission status table: six rows, Granted/Denied chip each, and a
+ * one-tap shortcut to the real system switch. Media management is the
+ * opt-in that makes fuse/blast deletion fully silent.
  */
 @Composable
 fun PermissionDashboard(mainViewModel: MainViewModel) {
@@ -74,6 +75,17 @@ fun PermissionDashboard(mainViewModel: MainViewModel) {
     val notificationLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { mainViewModel.refreshPermissions() }
+
+    fun openAppDetails() {
+        runCatching {
+            context.startActivity(
+                Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:${context.packageName}"),
+                ),
+            )
+        }
+    }
 
     Column {
         SectionHeader(stringResource(R.string.settings_section_permissions))
@@ -114,16 +126,14 @@ fun PermissionDashboard(mainViewModel: MainViewModel) {
             title = stringResource(R.string.perm_row_overlay),
             granted = permissions.overlay,
             actionLabel = stringResource(R.string.perm_action_open_settings),
-            onAction = {
-                runCatching {
-                    context.startActivity(
-                        Intent(
-                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:${context.packageName}"),
-                        ),
-                    )
-                }
-            },
+            onAction = { openAppDetails() },
+        )
+        PermissionRow(
+            icon = Icons.Rounded.PhotoLibrary,
+            title = stringResource(R.string.perm_row_media),
+            granted = permissions.manageMedia,
+            actionLabel = stringResource(R.string.perm_action_open_settings),
+            onAction = { openAppDetails() },
         )
         PermissionRow(
             icon = Icons.Rounded.BatteryChargingFull,

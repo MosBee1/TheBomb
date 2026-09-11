@@ -1,10 +1,12 @@
 package io.github.mosbee1.thebomb.util
 
 import android.Manifest
+import android.app.AppOpsManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.PowerManager
+import android.os.Process
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -38,4 +40,22 @@ object Permissions {
 
     fun canDrawOverOtherApps(context: Context): Boolean =
         Settings.canDrawOverlays(context)
+
+    /**
+     * Media management special access (MANAGE_MEDIA appop, API 30+). When
+     * the user grants it in system settings, MediaStore deletions run
+     * silently - fuse timers and the nightly blast need no confirmation
+     * dialogs. The op string is used literally because the
+     * OPSTR_MANAGE_MEDIA constant is not public on all API levels.
+     */
+    fun canManageMedia(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return true
+        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = appOps.unsafeCheckOpNoThrow(
+            "android:manage_media",
+            Process.myUid(),
+            context.packageName,
+        )
+        return mode == AppOpsManager.MODE_ALLOWED
+    }
 }

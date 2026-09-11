@@ -21,12 +21,12 @@ data class PermissionsState(
     val fullScreenIntent: Boolean = true,
     val batteryOptimization: Boolean = false,
     val overlay: Boolean = false,
+    val manageMedia: Boolean = false,
 )
 
 /**
  * App-scoped state shared across tabs: settings, permission state, and the
- * watcher lifecycle for the master switch. Held at activity scope so all
- * tabs and the onboarding flow observe the same truth.
+ * watcher lifecycle for the master switch.
  */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -40,7 +40,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         refreshPermissions()
-        // Covers force-stop + "app restarted while armed".
         viewModelScope.launch {
             if (container.settingsRepository.current().janitorEnabled) {
                 ScreenshotWatcherService.start(application)
@@ -57,6 +56,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             fullScreenIntent = Permissions.canUseFullScreenIntent(context),
             batteryOptimization = Permissions.isIgnoringBatteryOptimizations(context),
             overlay = Permissions.canDrawOverOtherApps(context),
+            manageMedia = Permissions.canManageMedia(context),
         )
     }
 
