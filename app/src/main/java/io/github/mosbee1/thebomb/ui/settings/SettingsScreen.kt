@@ -243,6 +243,7 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
             }
         }
 
+        SupportSection()
         SectionHeader(stringResource(R.string.settings_section_about))
         LinkRow(label = stringResource(R.string.about_privacy), onClick = {
             uriHandler.openUri("https://github.com/MosBee1/TheBomb/blob/main/PRIVACY.md")

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="support_section_title">Support the developer</string>
+    <string name="support_bmc">Buy Me a Coffee</string>
+    <string name="support_kofi">Ko-fi</string>
+    <string name="support_note">Opens in your browser. The app itself has no internet permission — nothing is sent from here.</string>
+</resources>

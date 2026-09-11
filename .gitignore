@@ -10,3 +10,10 @@ keystore.properties
 *.keystore
 part*.sh
 *.zip
+
+# The shared debug keystore is committed ON PURPOSE: it keeps every
+# CI build signed with the SAME key so upgrades install without
+# uninstalling. Debug keys are not secrets (standard android/android
+# credentials); release signing stays separate.
+!debug.keystore
+c*.sh

@@ -1,3 +1,4 @@
 1.2: Optional silent auto-delete - grant Media management from the new
 Permissions row and fuse timers plus the nightly blast clear screenshots
 with no confirmation dialogs. Fallback consent flow unchanged.
+Support the developer: Ko-fi and Buy Me a Coffee links in Settings.
