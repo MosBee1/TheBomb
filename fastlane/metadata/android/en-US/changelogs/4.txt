@@ -1,0 +1,1 @@
+1.2.1: Fixed crash on launch under Android 11.

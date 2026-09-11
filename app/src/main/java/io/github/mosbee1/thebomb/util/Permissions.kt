@@ -42,20 +42,22 @@ object Permissions {
         Settings.canDrawOverlays(context)
 
     /**
-     * Media management special access (MANAGE_MEDIA appop, API 30+). When
-     * the user grants it in system settings, MediaStore deletions run
-     * silently - fuse timers and the nightly blast need no confirmation
-     * dialogs. The op string is used literally because the
-     * OPSTR_MANAGE_MEDIA constant is not public on all API levels.
+     * Media management special access. The "android:manage_media" AppOp was
+     * added in API 31 (Android 12) - asking for it on API 30 throws
+     * IllegalArgumentException, which crashed the app on launch there. So
+     * the guard must be S, not R, and the check never throws.
      */
     fun canManageMedia(context: Context): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return true
-        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val mode = appOps.unsafeCheckOpNoThrow(
-            "android:manage_media",
-            Process.myUid(),
-            context.packageName,
-        )
-        return mode == AppOpsManager.MODE_ALLOWED
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return false
+        return try {
+            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+            appOps.unsafeCheckOpNoThrow(
+                "android:manage_media",
+                Process.myUid(),
+                context.packageName,
+            ) == AppOpsManager.MODE_ALLOWED
+        } catch (t: Throwable) {
+            false
+        }
     }
 }
