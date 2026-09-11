@@ -68,6 +68,7 @@ import io.github.mosbee1.thebomb.data.local.ScreenshotEntity
 import io.github.mosbee1.thebomb.data.model.AppSettings
 import io.github.mosbee1.thebomb.ui.MainViewModel
 import io.github.mosbee1.thebomb.ui.common.EmptyState
+import io.github.mosbee1.thebomb.ui.common.rememberListContentPadding
 import io.github.mosbee1.thebomb.ui.common.HomePermissionCards
 import io.github.mosbee1.thebomb.ui.common.SectionHeader
 import io.github.mosbee1.thebomb.ui.common.ScreenshotCard
@@ -134,7 +135,7 @@ fun HomeScreen(mainViewModel: MainViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 96.dp),
+        contentPadding = rememberListContentPadding(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item(key = "search") {

@@ -47,6 +47,7 @@ import io.github.mosbee1.thebomb.R
 import io.github.mosbee1.thebomb.TheBombApp
 import io.github.mosbee1.thebomb.data.model.StatsSnapshot
 import io.github.mosbee1.thebomb.util.ByteSizeFormatter
+import io.github.mosbee1.thebomb.ui.common.rememberAdaptiveHorizontalPadding
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import java.text.NumberFormat
@@ -67,13 +68,14 @@ class StatsViewModel(application: Application) : AndroidViewModel(application) {
 fun StatsScreen() {
     val statsViewModel: StatsViewModel = viewModel()
     val stats by statsViewModel.stats.collectAsStateWithLifecycle()
+    val hPad = rememberAdaptiveHorizontalPadding()
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, end = 16.dp, bottom = 96.dp),
+            .padding(start = hPad, end = hPad, bottom = 96.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(

@@ -1,7 +1,6 @@
 package io.github.mosbee1.thebomb.ui.settings
 
 import android.app.Application
-import android.os.Build
 import android.text.format.DateFormat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,12 +11,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.LocalCafe
 import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,7 +26,6 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,8 +39,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.UriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
@@ -54,7 +56,9 @@ import io.github.mosbee1.thebomb.data.model.AppSettings
 import io.github.mosbee1.thebomb.data.model.DurationUnit
 import io.github.mosbee1.thebomb.data.model.TimerPreset
 import io.github.mosbee1.thebomb.ui.MainViewModel
-import io.github.mosbee1.thebomb.ui.common.SectionHeader
+import io.github.mosbee1.thebomb.ui.common.SettingsGroup
+import io.github.mosbee1.thebomb.ui.common.SettingsRowDivider
+import io.github.mosbee1.thebomb.ui.common.rememberAdaptiveHorizontalPadding
 import io.github.mosbee1.thebomb.ui.common.rememberDurationLabel
 import io.github.mosbee1.thebomb.ui.common.shortUnitLabel
 import io.github.mosbee1.thebomb.work.BackgroundWork
@@ -85,7 +89,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun setReminder(enabled: Boolean) {
         viewModelScope.launch {
             container.settingsRepository.setCleanupReminderEnabled(enabled)
-            // Re-assert so the reminder job is armed/disarmed immediately.
             BackgroundWork.rescheduleCleanupFromSettings(appContext)
         }
     }
@@ -102,11 +105,6 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     }
 }
 
-/**
- * Settings: master switch, behavior toggles (auto-stage, popup), the daily
- * blast time + pre-blast reminder, the four independently configurable fuse
- * presets (unit chips + slider), and the about section.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(mainViewModel: MainViewModel) {
@@ -115,6 +113,7 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
     val mainSettings by mainViewModel.settings.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
+    val hPad = rememberAdaptiveHorizontalPadding()
 
     var showTimePicker by remember { mutableStateOf(false) }
     var editingSlot by remember { mutableStateOf<Int?>(null) }
@@ -124,33 +123,29 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
             .fillMaxSize()
             .statusBarsPadding()
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, end = 16.dp, bottom = 96.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(start = hPad, end = hPad, bottom = 96.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
+        Text(
+            stringResource(R.string.tab_settings),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(start = 20.dp, top = 8.dp),
+        )
+
         PermissionDashboard(mainViewModel)
-        SectionHeader(stringResource(R.string.settings_section_janitor))
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+
+        SettingsGroup(title = stringResource(R.string.settings_section_janitor)) {
             Row(
                 Modifier
-                    .clickable { mainViewModel.setJanitorEnabled(!mainSettings.janitorEnabled) }
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
-                    Text(
-                        stringResource(R.string.settings_janitor),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    Text(
-                        stringResource(R.string.settings_janitor_desc),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
+                    Text(stringResource(R.string.settings_janitor), style = MaterialTheme.typography.bodyLarge)
+                    Text(stringResource(R.string.settings_janitor_desc), style = MaterialTheme.typography.bodySmall)
                 }
+                Spacer(Modifier.width(12.dp))
                 Switch(
                     checked = mainSettings.janitorEnabled,
                     onCheckedChange = { mainViewModel.setJanitorEnabled(it) },
@@ -158,38 +153,32 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
             }
         }
 
-        SectionHeader(stringResource(R.string.settings_section_behavior))
-        SwitchRow(
-            title = stringResource(R.string.settings_auto_archive),
-            subtitle = stringResource(R.string.settings_auto_archive_desc),
-            checked = settings.autoArchiveEnabled,
-            onCheckedChange = settingsViewModel::setAutoArchive,
-        )
-        SwitchRow(
-            title = stringResource(R.string.settings_popup),
-            subtitle = stringResource(R.string.settings_popup_desc),
-            checked = settings.popupEnabled,
-            onCheckedChange = settingsViewModel::setPopup,
-        )
+        SettingsGroup(title = stringResource(R.string.settings_section_behavior)) {
+            SwitchRow(
+                title = stringResource(R.string.settings_auto_archive),
+                subtitle = stringResource(R.string.settings_auto_archive_desc),
+                checked = settings.autoArchiveEnabled,
+                onCheckedChange = settingsViewModel::setAutoArchive,
+            )
+            SettingsRowDivider()
+            SwitchRow(
+                title = stringResource(R.string.settings_popup),
+                subtitle = stringResource(R.string.settings_popup_desc),
+                checked = settings.popupEnabled,
+                onCheckedChange = settingsViewModel::setPopup,
+            )
+        }
 
-        SectionHeader(stringResource(R.string.settings_section_cleanup))
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+        SettingsGroup(title = stringResource(R.string.settings_section_cleanup)) {
             Row(
                 Modifier
+                    .fillMaxWidth()
                     .clickable { showTimePicker = true }
                     .padding(horizontal = 16.dp, vertical = 14.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(Modifier.weight(1f)) {
-                    Text(
-                        stringResource(R.string.settings_cleanup_time),
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                    Text(stringResource(R.string.settings_cleanup_time), style = MaterialTheme.typography.bodyLarge)
                     Text(
                         formatCleanupTime(settings.cleanupTimeMinutes),
                         style = MaterialTheme.typography.titleMedium,
@@ -202,24 +191,21 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
+            SettingsRowDivider()
+            SwitchRow(
+                title = stringResource(R.string.settings_reminder),
+                subtitle = stringResource(R.string.settings_reminder_desc),
+                checked = settings.cleanupReminderEnabled,
+                onCheckedChange = settingsViewModel::setReminder,
+            )
         }
-        SwitchRow(
-            title = stringResource(R.string.settings_reminder),
-            subtitle = stringResource(R.string.settings_reminder_desc),
-            checked = settings.cleanupReminderEnabled,
-            onCheckedChange = settingsViewModel::setReminder,
-        )
 
-        SectionHeader(stringResource(R.string.settings_section_presets))
-        settings.presets.forEach { preset ->
-            Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
+        SettingsGroup(title = stringResource(R.string.settings_section_presets)) {
+            settings.presets.forEachIndexed { index, preset ->
+                if (index > 0) SettingsRowDivider()
                 Row(
                     Modifier
+                        .fillMaxWidth()
                         .clickable { editingSlot = preset.slot }
                         .padding(horizontal = 16.dp, vertical = 14.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -232,6 +218,7 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
                     Text(
                         rememberDurationLabel(preset.amount, preset.unit),
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(Modifier.width(12.dp))
                     Text(
@@ -243,20 +230,28 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
             }
         }
 
-        SupportSection()
-        SectionHeader(stringResource(R.string.settings_section_about))
-        LinkRow(label = stringResource(R.string.about_privacy), onClick = {
-            uriHandler.openUri("https://github.com/MosBee1/TheBomb/blob/main/PRIVACY.md")
-        })
-        LinkRow(label = stringResource(R.string.about_license_title), onClick = {
-            uriHandler.openUri("https://github.com/MosBee1/TheBomb/blob/main/LICENSE")
-        })
+        SettingsGroup(title = stringResource(R.string.support_section_title)) {
+            LinkRow(Icons.Rounded.Favorite, stringResource(R.string.support_bmc), "https://buymeacoffee.com/MosBee1", uriHandler)
+            SettingsRowDivider()
+            LinkRow(Icons.Rounded.LocalCafe, stringResource(R.string.support_kofi), "https://ko-fi.com/mosbee1", uriHandler)
+        }
         Text(
-            "The Bomb v" + BuildConfig.VERSION_NAME + " · " +
-                stringResource(R.string.settings_mit),
+            stringResource(R.string.support_note),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
+        )
+
+        SettingsGroup(title = stringResource(R.string.settings_section_about)) {
+            LinkRow(null, stringResource(R.string.about_privacy), "https://github.com/MosBee1/TheBomb/blob/main/PRIVACY.md", uriHandler)
+            SettingsRowDivider()
+            LinkRow(null, stringResource(R.string.about_license_title), "https://github.com/MosBee1/TheBomb/blob/main/LICENSE", uriHandler)
+        }
+        Text(
+            "The Bomb v" + BuildConfig.VERSION_NAME + " · " + stringResource(R.string.settings_mit),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 20.dp),
         )
     }
 
@@ -303,52 +298,45 @@ private fun SwitchRow(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.fillMaxWidth(),
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable { onCheckedChange(!checked) }
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            Modifier
-                .clickable { onCheckedChange(!checked) }
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(Modifier.weight(1f)) {
-                Text(title, style = MaterialTheme.typography.bodyLarge)
-                Text(subtitle, style = MaterialTheme.typography.bodySmall)
-            }
-            Switch(checked = checked, onCheckedChange = onCheckedChange)
+        Column(Modifier.weight(1f)) {
+            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(subtitle, style = MaterialTheme.typography.bodySmall)
         }
+        Spacer(Modifier.width(12.dp))
+        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 
 @Composable
-private fun LinkRow(label: String, onClick: () -> Unit) {
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.fillMaxWidth(),
+private fun LinkRow(
+    icon: ImageVector?,
+    label: String,
+    url: String,
+    uriHandler: UriHandler,
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clickable { runCatching { uriHandler.openUri(url) } }
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            Modifier
-                .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-            Icon(Icons.Rounded.OpenInNew, contentDescription = null)
+        if (icon != null) {
+            Icon(icon, contentDescription = null, modifier = Modifier.size(22.dp), tint = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.width(12.dp))
         }
+        Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Icon(Icons.Rounded.OpenInNew, contentDescription = null, modifier = Modifier.size(18.dp))
     }
 }
 
-/**
- * Fuse preset editor: unit chips + amount slider within that unit's legal
- * range, with a live "Detonates in X" preview — the same control shape as
- * the custom picker in the popup.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PresetEditorDialog(
@@ -378,14 +366,10 @@ private fun PresetEditorDialog(
                             label = {
                                 Text(
                                     when (candidate) {
-                                        DurationUnit.MINUTES ->
-                                            stringResource(R.string.unit_minutes_short)
-                                        DurationUnit.HOURS ->
-                                            stringResource(R.string.unit_hours_short)
-                                        DurationUnit.DAYS ->
-                                            stringResource(R.string.unit_days_short)
-                                        DurationUnit.WEEKS ->
-                                            stringResource(R.string.unit_weeks_short)
+                                        DurationUnit.MINUTES -> stringResource(R.string.unit_minutes_short)
+                                        DurationUnit.HOURS -> stringResource(R.string.unit_hours_short)
+                                        DurationUnit.DAYS -> stringResource(R.string.unit_days_short)
+                                        DurationUnit.WEEKS -> stringResource(R.string.unit_weeks_short)
                                     }
                                 )
                             },
@@ -395,17 +379,12 @@ private fun PresetEditorDialog(
                 Spacer(Modifier.height(16.dp))
                 Slider(
                     value = safeAmount.toFloat(),
-                    onValueChange = { raw ->
-                        amount = raw.toInt().coerceIn(range.first, range.last)
-                    },
+                    onValueChange = { raw -> amount = raw.toInt().coerceIn(range.first, range.last) },
                     valueRange = range.first.toFloat()..range.last.toFloat(),
                     steps = (range.last - range.first) - 1,
                 )
                 Text(
-                    stringResource(
-                        R.string.label_deletes_in,
-                        rememberDurationLabel(safeAmount, unit),
-                    ),
+                    stringResource(R.string.label_deletes_in, rememberDurationLabel(safeAmount, unit)),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(Modifier.height(4.dp))
