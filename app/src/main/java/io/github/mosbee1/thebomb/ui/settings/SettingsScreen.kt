@@ -127,6 +127,7 @@ fun SettingsScreen(mainViewModel: MainViewModel) {
             .padding(start = 16.dp, end = 16.dp, bottom = 96.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
+        PermissionDashboard(mainViewModel)
         SectionHeader(stringResource(R.string.settings_section_janitor))
         Surface(
             shape = RoundedCornerShape(16.dp),

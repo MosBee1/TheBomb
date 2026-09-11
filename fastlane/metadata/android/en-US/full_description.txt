@@ -1,43 +1,41 @@
-The Bomb: every screenshot lands armed. Defuse the keepers, detonate the
-rest — on your schedule, on your device.
+The Bomb: every screenshot lands armed. Defuse the keepers, detonate the rest.
 
-TRIAGE IN ONE TAP
-The moment a screenshot lands, a translucent popup (and a notification with
-thumbnail) appears: Defuse, Archive, Detonate Now — or light a fuse without
-leaving the popup.
+The moment you take a screenshot, a compact popup floats over your screen —
+thumbnail, filename, and your choices: Defuse it forever, Archive it for
+tonight, or Detonate now. No digging through your gallery. No forgotten
+screenshots piling up for months.
 
-FUSES THAT ACTUALLY FIT
-Four quick fuse presets, each fully yours to configure — 10 minutes, 1 hour,
-1 day, 1 week by default, changeable to any amount of minutes, hours, days,
-or weeks. Prefer something else? A custom slider picks the exact duration
-with a live "Detonates in…" preview. Timed screenshots wear a live countdown
-chip; cut the fuse any time before it fires.
+FUSES THAT FIT YOUR LIFE
+Don't want to decide now? Light a fuse. Quick presets — 10 minutes, 1 hour,
+1 day, 1 week — or a slider for any custom duration. Every timed screenshot
+wears a live countdown chip; cut the fuse any time before it fires.
 
-THE DAILY BLAST
-Archive what you're not sure about. At your chosen time (default 11:30 PM)
-all archived, un-defused, un-fused screenshots are detonated — with an
-optional heads-up 30 minutes before. The Home screen always shows when the
-next blast runs.
+THE NIGHTLY BLAST
+Archived screenshots get one last review window. At your chosen time, all
+archived, un-defused, un-fused screenshots are cleared. The Home screen
+always shows when the next blast runs, and can warn you 30 minutes ahead.
 
 DEFUSED = SAFE FOREVER
-Pinned screenshots are exempt from every fuse and the daily blast. No
-exceptions.
+Defused screenshots are exempt from every fuse and every blast. A permanent
+vault, one tab away.
 
-STATS THAT FEEL GOOD
-Animated counters and a fallout report: screenshots processed, storage
-cleared, detonated vs defused.
+AFTERMATH, MEASURED
+Animated stats: processed, storage cleared, detonated vs defused, with a
+live breakdown of armed, archived, and safe.
 
 FIND ANYTHING
-Search by filename and filter by date range.
+Search by filename, filter by date range.
+
+PERMISSIONS, IN PLAIN SIGHT
+A built-in dashboard shows exactly which permissions are granted and which
+aren't, with one-tap shortcuts to fix any of them.
 
 PRIVATE BY ARCHITECTURE
-No accounts. No analytics. No ads. No network permission at all — the app
-cannot phone home because it has no way to. Everything stays on your device,
-and Android's own system dialog approves every deletion.
+No accounts. No analytics. No ads. The app doesn't even request the INTERNET
+permission — it is technically incapable of phoning home. Everything stays on
+your device, and every deletion passes through Android's own confirmation
+dialog. Free and open source under the MIT license.
 
 MATERIAL YOU
-Dynamic color on Android 12+, a hand-crafted teal/amber palette on older
-devices, full dark mode, serif-and-sans typography, and a small celebration
-when your triage list hits zero.
-
-Free and open source under the MIT license.
+Dynamic color on Android 12+, a hand-crafted palette on older devices, full
+dark mode, and a small celebration when your triage list hits zero.

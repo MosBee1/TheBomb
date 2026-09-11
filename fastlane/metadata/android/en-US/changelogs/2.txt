@@ -1,0 +1,3 @@
+1.1: Floating popup redesign — compact card over any app, tap outside to
+close. Popup and notification no longer show together. New Permissions
+dashboard in Settings with live status and one-tap fixes.
