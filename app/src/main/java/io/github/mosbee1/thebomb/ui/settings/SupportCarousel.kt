@@ -1,6 +1,7 @@
 package io.github.mosbee1.thebomb.ui.settings
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -59,6 +60,7 @@ private val slides = listOf(
  * animated dot indicators below.
  */
 @Composable
+@OptIn(ExperimentalFoundationApi::class)
 fun SupportCarousel() {
     val uriHandler = LocalUriHandler.current
     val pagerState = rememberPagerState(pageCount = { slides.size })

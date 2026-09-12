@@ -76,7 +76,8 @@ fun BlastTimeSheet(
                 selectedIndex = quickIndex,
                 onSelect = { index ->
                     quickIndex = index
-                    timeState.setTime(quick[index].second / 60, quick[index].second % 60)
+                    timeState.hour = quick[index].second / 60
+                    timeState.minute = quick[index].second % 60
                 },
             )
             Spacer(Modifier.size(20.dp))
