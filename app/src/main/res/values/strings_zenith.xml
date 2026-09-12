@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="section_general">General</string>
+    <string name="perm_row_all">Permissions</string>
+    <string name="perm_sub_all">Manage required and optional system permissions</string>
+    <string name="perm_sheet_title">Permissions required</string>
+    <string name="perm_sheet_subtitle">The Bomb needs these to catch, show, and clear screenshots.</string>
+    <string name="perm_all_ready">Everything is ready!</string>
+    <string name="perm_missing_fmt">%1$d still missing — tap Fix</string>
+    <string name="perm_sub_images">See new screenshots the moment they land</string>
+    <string name="perm_sub_notifications">Powers the popup and quick actions</string>
+    <string name="perm_sub_fsi">Popup over the lock screen</string>
+    <string name="perm_sub_overlay">Instant popup while the phone is unlocked</string>
+    <string name="perm_sub_media">Fuse and blast delete with no dialogs (Android 12+)</string>
+    <string name="perm_sub_battery">Keeps fuses punctual through Doze</string>
+    <string name="carousel_support_title">Support Development</string>
+    <string name="carousel_support_sub">Fuel the mission with a tip on Ko-fi</string>
+    <string name="carousel_bmc_title">Buy Me a Coffee</string>
+    <string name="carousel_bmc_sub">One coffee keeps the fuses burning</string>
+    <string name="carousel_star_title">Star on GitHub</string>
+    <string name="carousel_star_sub">Love The Bomb? Give the repo a star</string>
+    <string name="carousel_bug_title">Found a bug?</string>
+    <string name="carousel_bug_sub">Open an issue — fixes usually land fast</string>
+    <string name="blast_sheet_title">Blast time</string>
+    <string name="blast_sheet_sub">Archived screenshots are cleared at this time, every day</string>
+    <string name="blast_save">Save blast time</string>
+    <string name="preset_sheet_title">Fuse preset %1$d</string>
+    <string name="preset_sheet_sub">This chip appears in the popup\'s quick fuses</string>
+    <string name="preset_save">Save fuse</string>
+    <string name="about_row_changelog">View Changelog</string>
+    <string name="about_sub_changelog">Every version and what changed</string>
+    <string name="about_changelog_title">Changelog History</string>
+    <string name="about_full_changelog">Full changelog on GitHub</string>
+    <string name="about_row_repo">View Repository</string>
+    <string name="about_sub_repo">Source, issues, and releases on GitHub</string>
+    <string name="about_sub_privacy">What the app collects: nothing</string>
+    <string name="about_sub_license">MIT — free forever, no premium tier</string>
+    <string name="app_card_sub_fmt">v%1$s · MIT · built by MosBee</string>
+</resources>

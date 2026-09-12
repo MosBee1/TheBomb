@@ -20,8 +20,8 @@ android {
         applicationId = "io.github.mosbee1.thebomb"
         minSdk = 29
         targetSdk = 34
-        versionCode = 5
-        versionName = "1.3"
+        versionCode = 6
+        versionName = "1.4"
         vectorDrawables {
             useSupportLibrary = true
         }

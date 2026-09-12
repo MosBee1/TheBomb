@@ -1,0 +1,4 @@
+1.4: Settings redesigned in the reference style - stacked icon cards with
+chevrons, a rotating support banner, permissions as a bottom sheet with a
+big "Everything is ready!" pill, sheet editors with segmented controls and
+full-width save buttons, and an in-app changelog viewer.
